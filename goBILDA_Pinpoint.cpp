@@ -117,7 +117,11 @@ float goBILDA::Pinpoint::getNormalizedHeading(bool useBulkReadValue) // AngleUni
         _lastHeading = convertVectorToFloat(vec);
     }
 
-    return fmod(fabs(_lastHeading * RAD_TO_DEG), 360.0f) - 180.0;
+    // Wrap to [-180, 180) degrees, keeping the sign of the heading.
+    float heading = fmod(_lastHeading * RAD_TO_DEG + 180.0, 360.0);
+    if (heading < 0)
+        heading += 360.0f;
+    return heading - 180.0f;
 }
 
 float goBILDA::Pinpoint::getUnNormalizedHeading(bool useBulkReadValue)     // UnnormalizedAngleUnit unnormalizedAngleUnit
